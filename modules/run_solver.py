@@ -20,6 +20,7 @@ from modules.RandomSolver import *
 from modules.DomSolver import *
 from modules.DegreeSolver import *
 from modules.MeshShieldSolver import *
+from modules.ContainSolver import *
 
 if __name__ == "__main__":
     t1 = time.time()

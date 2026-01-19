@@ -13,9 +13,9 @@ Best course to run is by following the notebooks.
 ## Prerequisites
 
 - Python 3.8
-- SciPy
 - Pandas
 - NumPy
+- scikit-learn
 
 ## Other helpers (optional)
 - GitPython
@@ -37,5 +37,4 @@ Best course to run is by following the notebooks.
 - gputil
 - psutil
 - humanize
-- sklearn
 - tqdm

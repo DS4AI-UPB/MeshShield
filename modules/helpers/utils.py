@@ -18,6 +18,9 @@ def get_graph_info_from_seed(seeds_name):
 def get_seed_for_graph(graph_config, seed_path, node_percentage):
     return join(seed_path, f"{graph_config}_{node_percentage}_seeds.csv")
 
+def get_simple_seed_for_graph(seed_folder, graph_name):
+    return join(seed_folder, f"{graph_name}.seeds.txt")
+
 
 def get_subgraph(G, seed, other_seeds):
     node_adj = list([x for x in G.neighbors(seed)

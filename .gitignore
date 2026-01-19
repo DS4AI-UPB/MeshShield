@@ -131,3 +131,4 @@ dmypy.json
 # Temps
 results/*
 results/commands.txt
+current.py
