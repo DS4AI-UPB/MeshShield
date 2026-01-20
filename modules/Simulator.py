@@ -13,6 +13,13 @@ class Simulator():
         self.seeds = seeds
         self.blocked = {}
         self.log = {}
+        
+        # Assuming self.G is your undirected Graph
+        if not isinstance(self.G, nx.DiGraph):
+            print("Converting undirected Graph to DiGraph...")
+            self.G = self.G.to_directed()  # Creates bidirectional edges
+            print(f"New DiGraph: {self.G.is_directed()} ({len(self.G.edges)} edges)")
+
 
     def add_blocked(self, name, node_set):
         self.blocked[name] = list(node_set)
@@ -94,7 +101,9 @@ class Simulator():
         new_front_edges = []
         for v in front_nodes:
             for u in self.G.successors(v):
-                if (np.random.rand() <= self.G[v][u]['weight']):
+                edge_data = self.G[v][u]
+                weight = edge_data.get('weight', 1.0)  # default 1.0 if missing
+                if np.random.rand() <= weight:
                     new_front_edges.append((v, u))
         return new_front_edges
 

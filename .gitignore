@@ -132,3 +132,4 @@ dmypy.json
 results/*
 results/commands.txt
 current.py
+simulations/*

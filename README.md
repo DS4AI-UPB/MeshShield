@@ -17,14 +17,15 @@ Best course to run is by following the notebooks.
 - NumPy
 - scikit-learn
 
-## Other helpers (optional)
+## Other helpers
 - GitPython
+- plotly (visualization)
+- kaleido (visualization)
 
 ## Distributed Computing
 - joblib
 
 ### NI
-
 - NetworkX
 
 ### HS
