@@ -14,10 +14,17 @@ import math
 import numpy as np
 
 class DomSolver(slv.Solver):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Assuming self.G is your undirected Graph
+        if not isinstance(self.G, nx.DiGraph):
+            self.G = self.G.to_directed()  # Creates bidirectional edges
 
     def clear(self):
         for e in self.G.edges(data=True):
-            if e[2]['weight'] == 1:
+            weight = e[2].get('weight', 1.0)  # default 1.0 if missing
+            if weight == 1:
                 e[2]['weight'] = 0.99999  # No p=1 allowed due to probability calculation along shortest path
         self.create_superseed_and_update_weights()
 
@@ -28,12 +35,15 @@ class DomSolver(slv.Solver):
         neighbors = defaultdict(lambda: [])
         for seed in self.seeds:
             for n in self.G.neighbors(seed):
-                neighbors[n].append(self.G[seed][n]['weight'])
+                weight = self.G[seed][n].get('weight', 1.0)  # default 1.0 if missing
+                neighbors[n].append(weight)
         new_edges = [(self.superseed_index, n, DomSolver.get_total_weight(neighbors[n])) for n in neighbors]
         self.G.add_weighted_edges_from(new_edges)
         self.G = self.G.subgraph((set(self.G.nodes()) - set(self.seeds)) | set([self.superseed_index])).copy()
         for edge in self.G.edges():
-            self.G[edge[0]][edge[1]]['weight'] = -math.log(self.G[edge[0]][edge[1]]['weight'])
+            current_node = self.G[edge[0]][edge[1]]
+            weight = current_node.get('weight', 1.0)  # default 1.0 if missing
+            current_node['weight'] = -math.log(weight)
 
     @staticmethod
     def get_total_weight(list_of_probabilities):
