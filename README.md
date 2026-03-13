@@ -29,7 +29,6 @@ Best course to run is by following the notebooks.
 - NetworkX
 
 ### HS
-
 - PyTorch
 - TorchText
 - Spacy
