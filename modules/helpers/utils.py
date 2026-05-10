@@ -1,18 +1,8 @@
 from git import Repo
 from os.path import join
 from copy import deepcopy
-from re import search
 
-
-def get_graph_info_from_seed(seeds_name):
-    pattern = "\[([0-9]+)\]\[([0-9]+)\].*_([0-9]+)percent_seeds.*"
-    results = search(pattern, seeds_name)
-
-    num_nodes = results.group(1)
-    num_edges = results.group(2)
-    percentage = results.group(3)
-
-    return (num_nodes, num_edges, percentage)
+import scipy.sparse as sp
 
 
 def get_seed_for_graph(graph_config, seed_path, node_percentage):
@@ -23,7 +13,16 @@ def get_simple_seed_for_graph(seed_folder, graph_name):
 
 
 def get_subgraph(G, seed, other_seeds):
-    node_adj = list([x for x in G.neighbors(seed)
+    neighbors = None
+    if sp.issparse(G):
+        # Assuming G is a CSR matrix
+        # Get neighbors of node 'i'
+        start = G.indptr[seed]
+        end = G.indptr[seed+1]
+        neighbors = G.indices[start:end]
+    else:
+        neighbors = G.neighbors(seed)
+    node_adj = list([x for x in neighbors
                      if x not in other_seeds])
     multiplier = len(node_adj)
 

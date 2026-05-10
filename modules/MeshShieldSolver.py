@@ -3,7 +3,6 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 import time
-from copy import deepcopy
 
 from modules.SparseShieldSolver import SparseShieldSolver
 from modules.Solver import *

@@ -1,16 +1,20 @@
 import time
+import scipy.sparse as sp
+import networkx as nx
 
 class Solver:
     def __init__(self, G, seeds, k, **params):
-        if len(G) == 0:
+        graph_size = G.shape[0]
+        if graph_size == 0:
             raise Exception("Graph can not be empty")
         if len(seeds) == 0:
             raise Exception("Seeds can not be empty")
-        if k > len(G) - len(seeds):
+        if k > graph_size - len(seeds):
             raise Exception("Seeds can not be blocked: too large k")
         if k == 0:
             raise Exception("k should be greater than 0")
-        self.G = G.copy()
+        
+        self.G = nx.from_scipy_sparse_array(G) if sp.issparse(G) else G.copy()
         self.seeds = [int(node) for node in seeds]
         self.k = int(k)
         self.log = {}

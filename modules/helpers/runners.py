@@ -1,14 +1,13 @@
 from os import system, linesep, sep
 from os.path import join, abspath, exists
 
-from joblib import Parallel, delayed
 from modules import run_solver
 
 RUNNER_PATH = abspath(run_solver.__file__)
 
 
 def run_against_config(results_path, nodes_to_cut, algorithm_name,
-                       graph_path, seed_path, just_solve):
+                       graph_path, seed_path, just_solve, just_list_commands=False):
     config_name = seed_path.split(sep)[-1].split(".")[0]
     out_name = f"result_{algorithm_name}_{nodes_to_cut}_{config_name}.json"
     output_name = join(results_path, out_name)
@@ -23,11 +22,11 @@ def run_against_config(results_path, nodes_to_cut, algorithm_name,
     options = f"--outfile {output_name} --just_solve {1 if just_solve else 0}"
     full_command = f"{script_to_run} {arguments} {options}"
 
-    with open(join(results_path, "commands.txt"), "a+") as myfile:
+    with open("commands.txt", "a+") as myfile:
         myfile.write(full_command + linesep)
-
-    print(full_command)
-    system(full_command)
+        
+    if not just_list_commands:
+        system(full_command)
 
 
 def run_solver_against_configs(results_path=None,
@@ -38,7 +37,7 @@ def run_solver_against_configs(results_path=None,
                                step=10,
                                algorithms_to_run=[],
                                just_solve=True,
-                               num_threads=1):
+                               just_list_commands=False):
     if (results_path == None) or (graph_file == None) or (seed_file == None):
         print("Missing Input Files")
         return None
@@ -49,12 +48,12 @@ def run_solver_against_configs(results_path=None,
     
     configs = list([(nodes_to_cut, algorithm_name) for nodes_to_cut in range(
         startNumber, endNumber, step) for algorithm_name in algorithms_to_run])
-
-    Parallel(n_jobs=num_threads)(
-        delayed(run_against_config)(results_path,
-                                    nodes_to_cut,
-                                    algorithm_name,
-                                    graph_file,
-                                    seed_file,
-                                    just_solve)
-        for (nodes_to_cut, algorithm_name) in configs)
+    
+    for (nodes_to_cut, algorithm_name) in configs:
+        run_against_config(results_path,
+                                        nodes_to_cut,
+                                        algorithm_name,
+                                        graph_file,
+                                        seed_file,
+                                        just_solve,
+                                        just_list_commands)

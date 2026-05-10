@@ -3,6 +3,7 @@ import argparse
 import numpy as np
 import json
 import pickle as pkl
+import scipy.sparse as sp
 
 import os
 from os.path import isfile
@@ -44,7 +45,8 @@ if __name__ == "__main__":
         print("Locking:", args.outfile)
         Path(args.outfile).touch()
 
-        G, seeds = pkl.load(open(args.graph, 'rb')), np.atleast_1d(
+        G = pkl.load(open(args.graph, 'rb')) if args.graph.endswith('pkl') else sp.load_npz(args.graph)
+        seeds = np.atleast_1d(
             np.loadtxt(args.seeds, delimiter=","))
         k = args.nodes_to_block
         problem_params = {}
@@ -68,8 +70,9 @@ if __name__ == "__main__":
         except:
             None
 
+        graph_size = G.shape[0]
         print("%s blocked %d nodes in a graph of size %d." %
-            (solver.get_name(), k, len(G)))
+            (solver.get_name(), k, graph_size))
 
         if args.just_solve == 0:
             print("Running simulations...")
