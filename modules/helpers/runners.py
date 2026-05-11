@@ -8,7 +8,7 @@ RUNNER_PATH = abspath(run_solver.__file__)
 
 def run_against_config(results_path, nodes_to_cut, algorithm_name,
                        graph_path, seed_path, just_solve, just_list_commands=False):
-    config_name = seed_path.split(sep)[-1].split(".")[0]
+    config_name = seed_path.split(sep)[-1].replace(".seeds.txt", "")
     out_name = f"result_{algorithm_name}_{nodes_to_cut}_{config_name}.json"
     output_name = join(results_path, out_name)
 

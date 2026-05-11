@@ -70,7 +70,7 @@ if __name__ == "__main__":
         except:
             None
 
-        graph_size = G.shape[0]
+        graph_size = solver.get_graph_size()
         print("%s blocked %d nodes in a graph of size %d." %
             (solver.get_name(), k, graph_size))
 

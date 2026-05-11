@@ -43,11 +43,10 @@ class MeshShieldSolver(Solver):
             return SKIP_RESULT
         
         new_k = min(2 * self.k, len(sub_graph) - 1)
-        return self.run_ss(mul, sub_graph, [seed], new_k, self.params,)
+        return self.run_ss(multiplier = mul, subG = sub_graph, seeds = [seed], k = new_k, params = self.params)
     
     def run(self):
         t1 = time.time()
-        print(f"Running against {len(self.seeds)} seeds.")
 
         results = Parallel(n_jobs=-1)(delayed(self.work_on_graphs)(seed)for seed in self.seeds)
 
