@@ -37,6 +37,8 @@ if __name__ == "__main__":
     parser.add_argument("-p", "--other_params", type=str, nargs="*")
     parser.add_argument("-s", "--just_solve",
                         type=int, default=1)
+    parser.add_argument("-nt", "--num_threads",
+                        type=int, default=None)
     args = parser.parse_args()
 
     if isfile(args.outfile):
@@ -59,6 +61,7 @@ if __name__ == "__main__":
                     problem_params[args.other_params[2*i]
                                 ] = args.other_params[2*i+1]
         z = dict(problem_params)
+        z["num_threads"] = args.num_threads
 
         Solver = eval(args.algorithm + "Solver")
         solver = Solver(G, seeds, k, **z)

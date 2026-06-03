@@ -47,8 +47,8 @@ class MeshShieldSolver(Solver):
     
     def run(self):
         t1 = time.time()
-
-        results = Parallel(n_jobs=-1)(delayed(self.work_on_graphs)(seed)for seed in self.seeds)
+        
+        results = Parallel(n_jobs=-1 if (self.num_threads == None) else self.num_threads)(delayed(self.work_on_graphs)(seed)for seed in self.seeds)
 
         blocked = self.combine_blocked_nodes(results)
 

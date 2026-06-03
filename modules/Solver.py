@@ -21,6 +21,10 @@ class Solver:
         self.log = {}
         self.log['created'] = time.time()
         self.params = params
+        try:
+            self.num_threads = int(params["num_threads"])
+        except:
+            self.num_threads = None
         self.clear()
 
     def clear(self):
